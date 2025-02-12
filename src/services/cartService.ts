@@ -22,7 +22,24 @@ export const getActiveCartForUser = async ({userId}: GetActiveCartForUser)=>{
     }
 
     return cart
+};
+
+interface ClearCart {
+    userId: string
 }
+
+export const clearCart = async ({userId}: ClearCart)=>{
+    
+    const cart = await getActiveCartForUser({userId})
+
+    cart.items = []
+    cart.totalAmount = 0
+
+    const updatedCart = await cart.save()
+    
+    return {data: updatedCart, statusCode: 200}
+}
+
 
 interface AddItemToCart {
     productId: any
@@ -71,7 +88,6 @@ interface UpdateItemInCart {
 
 export const updateItemInCart = async ({ productId, quantity,userId }: UpdateItemInCart) =>{
     
-    // Calculate total amount for the cart
     const cart = await getActiveCartForUser({userId})
     const existsInCart = cart.items.find((p)=> p.product.toString() === productId)
     if(!existsInCart){
@@ -100,7 +116,37 @@ export const updateItemInCart = async ({ productId, quantity,userId }: UpdateIte
     cart.totalAmount = total
     
     const updatedCart = await cart.save()
-
+    
     return { data: updatedCart, statusCode: 200}
+    
+}
 
+interface DeleteItemInCart {
+    productId: any
+    userId: string
+}
+
+export const deleteItemInCart = async ({ userId, productId}: DeleteItemInCart)=>{
+    
+    const cart = await getActiveCartForUser({userId})
+    
+    const existsInCart = cart.items.find((p)=> p.product.toString() === productId)
+    if(!existsInCart){
+        return {data: "item does not exist in Cart", statusCode: 400}
+    }
+    
+    // this code if you want to use it again go to 84video
+    const otherCartItems = cart.items.filter((p)=> p.product.toString() !== productId)
+    
+    const total = otherCartItems.reduce((sum , product)=>{
+        sum += product.quantity * product.unitPrice
+        return sum
+    }, 0)
+    
+    cart.items = otherCartItems;
+    cart.totalAmount = total;
+    
+    const updatedCart = await cart.save()
+    
+    return { data: updatedCart, statusCode: 200}
 }
