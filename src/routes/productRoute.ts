@@ -1,4 +1,3 @@
-import { Express } from "express";
 import express from 'express';
 import { getAllProducts } from "../services/productService";
 
