@@ -35,7 +35,7 @@ return (
     <Container sx={{marginTop:2}}>
         <Grid container spacing={2}>
             {products.map((p)=>(
-                <Grid item md={4}><ProductCard {...p}/></Grid>
+                <Grid key={p._id} item md={4}><ProductCard {...p}/></Grid>
             ))}
         </Grid>
     </Container>

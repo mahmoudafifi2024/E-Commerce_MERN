@@ -2,6 +2,7 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import { BASE_URL } from "../constants/baseUrl";
 import { useAuth } from "../context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 
 export default function RegisterPage() {
@@ -14,6 +15,8 @@ export default function RegisterPage() {
     const passwordRef = useRef<HTMLInputElement>(null);
 
     const {login} = useAuth()
+    const navigate = useNavigate()
+
     
     const onSubmit = async () => {
         const firstName = firstNameRef.current?.value;
@@ -54,6 +57,8 @@ export default function RegisterPage() {
         }
 
         login(email, token)
+
+        navigate('/')
 
         console.log(token)
     };
