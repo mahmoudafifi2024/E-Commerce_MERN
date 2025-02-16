@@ -6,12 +6,15 @@ import AuthProvider from "./context/Auth/AuthProvider"
 import LoginPage from "./pages/LoginPage"
 import CartPage from "./pages/CartPage"
 import ProtectedRoute from "./components/ProtectedRoute"
+import CartProvider from "./Cart/CartProvider"
 
 
 function App() {
 
   return (
     <AuthProvider>
+      <CartProvider>
+
     <BrowserRouter>
     <Navbar/>
       <Routes>
@@ -24,8 +27,9 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   )
 }
-// 4:45 video 95
+// 7:35 video 99
 export default App
