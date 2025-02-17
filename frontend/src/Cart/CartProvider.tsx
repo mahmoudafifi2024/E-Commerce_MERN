@@ -12,14 +12,14 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const fetchCart = async () => {
         if (!token) return;
-
+        
         try {
             const response = await fetch(`${BASE_URL}/cart`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
+            
             if (!response.ok) {
                 setError("Failed to fetch user cart, Please try again");
                 return;
@@ -74,8 +74,34 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         }
     };
 
+    const updateItemInCart = async (productId: string, quantity: number) => {
+        try {
+            const response = await fetch(`${BASE_URL}/cart/items`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    productId,
+                    quantity,
+                }),
+            });
+
+            if (!response.ok) {
+                setError("Failed to update Cart");
+                return;
+            }
+
+            fetchCart();
+        } catch (error) {
+            console.error("Error updating item in cart:", error);
+            setError("Something went wrong while updating the item.");
+        }
+    };
+
     return (
-        <CartContext.Provider value={{ cartItems, totalAmount, addItemToCart }}>
+        <CartContext.Provider value={{ cartItems, totalAmount, addItemToCart, updateItemInCart }}>
             {children}
         </CartContext.Provider>
     );
