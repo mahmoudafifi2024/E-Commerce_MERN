@@ -9,24 +9,27 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalAmount, setTotalAmount] = useState<number>(0);
     const [error, setError] = useState("");
+    
 
     const fetchCart = async () => {
         if (!token) return;
-        
+
         try {
             const response = await fetch(`${BASE_URL}/cart`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            
+
             if (!response.ok) {
                 setError("Failed to fetch user cart, Please try again");
+                console.log(error)
                 return;
             }
 
             const cart = await response.json();
             const cartItemsMapped = cart.items.map(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 ({ product, quantity, unitPrice }: { product: any; quantity: number; unitPrice: number }) => ({
                     productId: product._id,
                     title: product.title,
@@ -41,11 +44,13 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         } catch (error) {
             console.error("Error fetching cart:", error);
             setError("Something went wrong while fetching the cart.");
+            console.log(error)
         }
     };
 
     useEffect(() => {
         fetchCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token]);
 
     const addItemToCart = async (productId: string) => {
@@ -64,6 +69,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
             if (!response.ok) {
                 setError("Unable to add item to cart, please try again!");
+                console.log(error)
                 return;
             }
 
@@ -71,6 +77,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         } catch (error) {
             console.error("Error adding item to cart:", error);
             setError("Something went wrong while adding the item.");
+            console.log(error)
         }
     };
 
@@ -90,6 +97,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
             if (!response.ok) {
                 setError("Failed to update Cart");
+                console.log(error)
                 return;
             }
 
@@ -97,11 +105,35 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         } catch (error) {
             console.error("Error updating item in cart:", error);
             setError("Something went wrong while updating the item.");
+            console.log(error)
+        }
+    };
+
+    const removeItemInCart = async (productId: string) => {
+        try {
+            const response = await fetch(`${BASE_URL}/cart/items/${productId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                setError("Failed to Delete Cart");
+                console.log(error)
+                return;
+            }
+
+            fetchCart();
+        } catch (error) {
+            console.error("Error removing item in cart:", error);
+            setError("Something went wrong while removing the item.");
+            console.log(error)
         }
     };
 
     return (
-        <CartContext.Provider value={{ cartItems, totalAmount, addItemToCart, updateItemInCart }}>
+        <CartContext.Provider value={{ cartItems, totalAmount, addItemToCart, updateItemInCart, removeItemInCart }}>
             {children}
         </CartContext.Provider>
     );

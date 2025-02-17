@@ -1,9 +1,8 @@
 import { Container, Typography, Box, ButtonGroup, Button } from "@mui/material";
 import { useCart } from "../Cart/CartContext";
-import { deleteItemInCart, updateItemInCart } from "../../../backend/src/services/cartService";
 
 export default function CartPage() {
-const { cartItems, totalAmount, updateItemInCart } = useCart();
+const { cartItems, totalAmount, updateItemInCart, removeItemInCart } = useCart();
 
 const handleQuantity = (productId: string, quantity: number) => {
     if(quantity <= 0){
@@ -14,7 +13,7 @@ const handleQuantity = (productId: string, quantity: number) => {
 };
 
 const handleRemoveItem = (productId: string) => {
-    deleteItemInCart
+    removeItemInCart(productId)
 };
 
 return (
