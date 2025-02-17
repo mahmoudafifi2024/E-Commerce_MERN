@@ -15,9 +15,11 @@ import Grid from "@mui/material/Grid";
 import { Badge, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useCart } from "../Cart/CartContext";
 
 function Navbar() {
 const { username, isAuthenticated, logout } = useAuth();
+const { cartItems } = useCart();
 const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
 );
@@ -51,7 +53,13 @@ return (
     <Container maxWidth="xl">
         <Toolbar disableGutters>
         <Grid container alignItems="center" justifyContent="space-between">
-            <Grid item sx={{ display: "flex", alignItems: "center" }}>
+            <Button onClick={()=> navigate('/')}>
+            <Box sx={{
+                display:"flex",
+                flexDirection:"row",
+                alignItems:"center"
+            }}>
+                <Grid item sx={{ display: "flex", alignItems: "center" }}>
             <AdbIcon sx={{ mr: 1 }} />
             <Typography
                 variant="h6"
@@ -68,11 +76,13 @@ return (
             </Typography>
             </Grid>
 
+            </Box>
+            </Button>
 
             <Box display="flex" flexDirection="row" alignItems="center" gap={2} flexGrow={0}>
 
                 <IconButton onClick={handleCart} aria-label="cart">
-                <Badge badgeContent={4} color="secondary">
+                <Badge badgeContent={cartItems.length} color="secondary">
                 <ShoppingCartIcon sx={{color:"#ffffff"}} />
                 </Badge>
                 </IconButton>

@@ -1,47 +1,27 @@
-import { Container } from "@mui/material";
-import Typography from '@mui/material/Typography';
-import { useEffect, useState } from "react";
-import { BASE_URL } from "../constants/baseUrl";
-import { useAuth } from "../context/Auth/AuthContext";
+import { Container, Typography, Box } from "@mui/material";
 import { useCart } from "../Cart/CartContext";
 
-
 export default function CartPage() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { cartItems, totalAmount } = useCart();
 
-    const {token} = useAuth()
-    const {cartItems, totalAmount} = useCart()
-    const [error, setError] = useState("")
+    return (
+        <Container sx={{ mt: 2 }}>
+            <Typography variant="h4" gutterBottom>
+                My Cart
+            </Typography>
 
-    // useEffect(()=>{
-
-    //     if(!token){
-    //         return
-    //     }
-
-    //     const fetchCart = async()=>{
-    //         const response = await fetch(`${BASE_URL}/cart`, {
-    //             headers: {
-    //                 "Authorization": `Bearer ${token}`
-    //             }
-    //         });
-
-    //         if(!response.ok){
-    //             setError('Failed to fetch user cart, Please try again')
-    //         }
-
-    //         const data = await response.json()
-    //         setCart(data)
-    //     }
-
-    //     fetchCart()
-    // },[token])
-    
-return (
-    <Container sx={{mt:2}}>
-    <Typography variant="h4">My Cart</Typography>
-    {cartItems.map((item)=>{
-        <Box>{item.title}</Box>
-    })}
-    </Container>
-)
+            {cartItems.length > 0 ? (
+                cartItems.map((item) => (
+                    <Box sx={{ p: 2, borderBottom: "1px solid #ddd" }}>
+                        <Typography variant="h6">{item.title}</Typography>
+                    </Box>
+                ))
+            ) : (
+                <Typography variant="body1" sx={{ mt: 2 }}>
+                    Your cart is empty.
+                </Typography>
+            )}
+        </Container>
+    );
 }
