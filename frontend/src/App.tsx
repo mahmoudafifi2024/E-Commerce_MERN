@@ -31,5 +31,4 @@ function App() {
     </AuthProvider>
   )
 }
-// 9:00 video 100
 export default App
