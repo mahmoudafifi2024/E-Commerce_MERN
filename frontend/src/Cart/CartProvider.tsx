@@ -28,6 +28,8 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             }
 
             const cart = await response.json();
+
+            
             const cartItemsMapped = cart.items.map(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 ({ product, quantity, unitPrice }: { product: any; quantity: number; unitPrice: number }) => ({
@@ -132,8 +134,35 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         }
     };
 
+    const clearCart = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/cart`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                setError("Failed to Delete Cart");
+                console.log(error)
+                return;
+            }
+
+            fetchCart();
+        } catch (error) {
+            console.error("Error removing item in cart:", error);
+            setError("Something went wrong while removing the item.");
+            console.log(error)
+        }
+
+        setCartItems([]);
+        setTotalAmount(0);
+    };
+
     return (
-        <CartContext.Provider value={{ cartItems, totalAmount, addItemToCart, updateItemInCart, removeItemInCart }}>
+        <CartContext.Provider value={{ cartItems, totalAmount, 
+        addItemToCart, updateItemInCart, removeItemInCart, clearCart }}>
             {children}
         </CartContext.Provider>
     );

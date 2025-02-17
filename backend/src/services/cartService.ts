@@ -49,13 +49,14 @@ export const clearCart = async ({userId}: ClearCart)=>{
     cart.items = []
     cart.totalAmount = 0
 
-    await cart.save()
+
+    const updatedCart =  await cart.save()
     
     return {
-        data: getActiveCartForUser({ userId, populateProduct:true}),
+        data: await getActiveCartForUser({ userId, populateProduct:true}),
         statusCode: 200}
-}
-
+    }
+    
 
 interface AddItemToCart {
     productId: any
@@ -89,12 +90,14 @@ export const addItemToCart = async ({ productId, quantity,userId }: AddItemToCar
         unitPrice: product.price, 
         quantity})
 
+    //Update the totalAmount 
+
     cart.totalAmount += product.price * quantity
 
-    await cart.save()
+    const updatedCart = await cart.save()
 
     return { 
-        data: getActiveCartForUser({ userId, populateProduct:true}), 
+        data: updatedCart, 
         statusCode: 200}
 }
 
