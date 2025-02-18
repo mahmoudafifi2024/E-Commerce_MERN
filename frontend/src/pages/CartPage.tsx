@@ -1,8 +1,10 @@
 import { Container, Typography, Box, ButtonGroup, Button } from "@mui/material";
 import { useCart } from "../Cart/CartContext";
+import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
 const { cartItems, totalAmount, updateItemInCart, removeItemInCart, clearCart } = useCart();
+const navigate = useNavigate()
 
 const handleQuantity = (productId: string, quantity: number) => {
     if(quantity <= 0){
@@ -14,6 +16,11 @@ const handleQuantity = (productId: string, quantity: number) => {
 
 const handleRemoveItem = (productId: string) => {
     removeItemInCart(productId)
+};
+
+
+const handleCheckout = (productId: string) => {
+    navigate('/checkout')
 };
 
 
@@ -63,9 +70,18 @@ return (
         </Typography>
     )}
 
+    <Box sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            p: 2
+            }}>
     <Typography variant="h5" sx={{ mt: 3 }}>
         Total: {totalAmount.toFixed(2)} EGP
     </Typography>
+    <Button onClick={handleCheckout} variant="contained">Go to Checkout</Button>
+    </Box>
     </Container>
 );
 }
