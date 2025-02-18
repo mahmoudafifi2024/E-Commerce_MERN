@@ -1,87 +1,110 @@
-import { Container, Typography, Box, ButtonGroup, Button } from "@mui/material";
-import { useCart } from "../Cart/CartContext";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Container from "@mui/material/Container";
+import { useCart } from "../context/Cart/CartContext";
 import { useNavigate } from "react-router-dom";
 
-export default function CartPage() {
-const { cartItems, totalAmount, updateItemInCart, removeItemInCart, clearCart } = useCart();
-const navigate = useNavigate()
+const CartPage = () => {
+  const {
+    cartItems,
+    totalAmount,
+    updateItemInCart,
+    removeItemInCart,
+    clearCart,
+  } = useCart();
 
-const handleQuantity = (productId: string, quantity: number) => {
-    if(quantity <= 0){
-        return
+  const navigate = useNavigate();
+
+  const handleQuantity = (productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      return;
     }
-    
+
     updateItemInCart(productId, quantity);
-};
+  };
 
-const handleRemoveItem = (productId: string) => {
-    removeItemInCart(productId)
-};
+  const handleRemoveItem = (productId: string) => {
+    removeItemInCart(productId);
+  };
 
+  const handleCheckout = () => {
+    navigate("/checkout")
+  };
 
-const handleCheckout = (productId: string) => {
-    navigate('/checkout')
-};
-
-
-
-return (
-    <Container fixed sx={{ mt: 2 }}>
-        <Box display="flex" flexDirection="row" justifyContent="space-between">
-    <Typography variant="h4" gutterBottom>
-        My Cart
-    </Typography>
-    <Button onClick={() => clearCart()}>REMOVE All</Button>
-        </Box>
-
-    {cartItems.length > 0 ? (
-        cartItems.map((item) => (
+  const renderCartItems = () => (
+    <Box display="flex" flexDirection="column" gap={4}>
+      {cartItems.map((item) => (
         <Box
-            key={item.productId}
-            sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            p: 2,
-            borderBottom: "1px solid #ddd",
-            }}
+          display="flex"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{
+            border: 1,
+            borderColor: "#f2f2f2",
+            borderRadius: 5,
+            padding: 1,
+          }}
         >
-            <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
-            <img width={150} src={item.image} alt={item.title} />
-            <Box p={5}>
-                <Typography variant="h4">{item.title}</Typography>
-                <Typography variant="h6">
+          <Box display="flex" flexDirection="row" alignItems="center" gap={1}>
+            <img src={item.image} width={50} />
+            <Box>
+              <Typography variant="h6">{item.title}</Typography>
+              <Typography>
                 {item.quantity} x {item.unitPrice} EGP
-                </Typography>
+              </Typography>
+              <Button onClick={() => handleRemoveItem(item.productId)}>
+                Remove Item
+              </Button>
             </Box>
-            </Box>
-
-            <ButtonGroup variant="contained" aria-label="Basic button group">
-            <Button onClick={() => handleQuantity(item.productId, item.quantity - 1)}>-</Button>
-            <Button onClick={() => handleQuantity(item.productId, item.quantity + 1)}>+</Button>
-            </ButtonGroup>
-            <Button onClick={() => handleRemoveItem(item.productId)}>REMOVE</Button>
+          </Box>
+          <ButtonGroup variant="contained" aria-label="Basic button group">
+            <Button
+              onClick={() => handleQuantity(item.productId, item.quantity - 1)}
+            >
+              -
+            </Button>
+            <Button
+              onClick={() => handleQuantity(item.productId, item.quantity + 1)}
+            >
+              +
+            </Button>
+          </ButtonGroup>
         </Box>
-        ))
-    ) : (
-        <Typography variant="body1" sx={{ mt: 2 }}>
-        Your cart is empty.
+      ))}
+      <Box display="flex" flexDirection="row" justifyContent="space-between">
+        <Typography variant="h4">
+          Total Amount: {totalAmount.toFixed(2)} EGP
         </Typography>
-    )}
-
-    <Box sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            p: 2
-            }}>
-    <Typography variant="h5" sx={{ mt: 3 }}>
-        Total: {totalAmount.toFixed(2)} EGP
-    </Typography>
-    <Button onClick={handleCheckout} variant="contained">Go to Checkout</Button>
+        <Button variant="contained" onClick={handleCheckout}>
+          Go To Checkout
+        </Button>
+      </Box>
     </Box>
+  );
+
+  return (
+    <Container fixed sx={{ mt: 2 }}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
+        sx={{ mb: 2 }}
+      >
+        <Typography variant="h4">My Cart</Typography>
+        <Button onClick={() => clearCart()}>Clear Cart</Button>
+      </Box>
+      {cartItems.length ? (
+        renderCartItems()
+      ) : (
+        <Typography>
+          Cart is empty. Please start shopping and add items first.
+        </Typography>
+      )}
     </Container>
-);
-}
+  );
+};
+
+export default CartPage;
