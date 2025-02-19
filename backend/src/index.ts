@@ -15,19 +15,21 @@ const port = 3001;
 
 app.use(express.json());
 
-const corsOptions = {
-  origin: ["https://your-frontend.vercel.app"],
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: ["https://ecommerce-mern-frontend.vercel.app"],
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   credentials: true,
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 
-console.log("Database URL:", process.env.DATABASE_URL);
 mongoose
-  .connect(process.env.DATABASE_URL || "")
-  .then(() => console.log("Mongo connected!"))
-  .catch((err) => console.log("Failed to connect!", err));
+.connect(process.env.DATABASE_URL || "")
+.then(() => console.log("Mongo ATLAS connected!"))
+.catch((err) => console.log("Failed to connect!", err));
+
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
 
 // Seed the products to database
 seedInitialProducts();

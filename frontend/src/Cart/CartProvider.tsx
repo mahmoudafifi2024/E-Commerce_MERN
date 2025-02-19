@@ -14,6 +14,9 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const fetchCart = async () => {
         if (!token) return;
 
+        console.log(BASE_URL)
+        console.log(token)
+
         try {
             const response = await fetch(`${BASE_URL}/cart`, {
                 headers: {

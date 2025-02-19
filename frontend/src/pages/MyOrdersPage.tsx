@@ -6,7 +6,6 @@
     _id: string;
     address: string;
     total: number;
-    orderItems: number;
     }
 
     export default function MyOrdersPage() {
@@ -31,11 +30,11 @@
         }}
         >
         {myOrders && myOrders.length > 0 ? (
-            myOrders.map(({ _id , address ,orderItems, total}: Order) => (
+            myOrders.map(({ _id , address , total}: Order) => (
             <Box key={_id} sx={{ width: "100%", border: 1, borderColor: "gray", p: 2 }}>
                 <Typography  align="center">{_id}</Typography>
+                <Typography  align="center">{_id}</Typography>
                 <Typography  align="center">{address}</Typography>
-                <Typography  align="center">{orderItems.length}</Typography>
                 <Typography  align="center">{total}</Typography>
             </Box>
             ))
