@@ -15,7 +15,7 @@ const port = 3001;
 
 app.use(express.json());
 app.use(cors());
-
+console.log("Database URL:", process.env.DATABASE_URL);
 mongoose
   .connect(process.env.DATABASE_URL || "")
   .then(() => console.log("Mongo connected!"))

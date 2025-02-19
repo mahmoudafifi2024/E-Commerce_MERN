@@ -51,36 +51,38 @@ const CheckoutPage = () => {
       }}
     >
       {cartItems.map((item) => (
-        <Box
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          width="100%"
-        >
-          <Box
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-            gap={1}
-            width="100%"
-          >
-            <img src={item.image} width={50} />
-            <Box
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
-            >
-              <Typography variant="h6">{item.title}</Typography>
-              <Typography>
-                {item.quantity} x {item.unitPrice} EGP
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-      ))}
+  <Box
+    key={item.productId} // ✅ إضافة مفتاح فريد
+    display="flex"
+    flexDirection="row"
+    justifyContent="space-between"
+    alignItems="center"
+    width="100%"
+  >
+    <Box
+      display="flex"
+      flexDirection="row"
+      alignItems="center"
+      gap={1}
+      width="100%"
+    >
+      <img src={item.image} width={50} />
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        width="100%"
+      >
+        <Typography variant="h6">{item.title}</Typography>
+        <Typography>
+          {item.quantity} x {item.unitPrice} EGP
+        </Typography>
+      </Box>
+    </Box>
+  </Box>
+))}
+
       <Box>
         <Typography variant="body2" sx={{ textAlign: "right" }}>
           Total Amount: {totalAmount.toFixed(2)} EGP

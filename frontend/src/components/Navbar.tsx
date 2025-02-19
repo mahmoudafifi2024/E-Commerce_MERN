@@ -28,8 +28,12 @@ function Navbar() {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleMyOrders = () => {
+    navigate('/my-orders')
     setAnchorElUser(null);
   };
 
@@ -138,7 +142,7 @@ function Navbar() {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    <MenuItem onClick={handleMyOrders}>
                       <Typography textAlign="center">My Orders</Typography>
                     </MenuItem>
                     <MenuItem onClick={handleLogout}>

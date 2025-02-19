@@ -1,44 +1,47 @@
-import { Container, Typography, Box } from "@mui/material";
-import { useAuth } from "../context/Auth/AuthContext";
-import { useEffect } from "react";
+    import { Container, Typography, Box } from "@mui/material";
+    import { useAuth } from "../context/Auth/AuthContext";
+    import { useEffect } from "react";
 
-export default function MyOrdersPage() {
-    
+    interface Order {
+    _id: string;
+    address: string;
+    total: number;
+    orderItems: number;
+    }
+
+    export default function MyOrdersPage() {
     const { getMyOrders, myOrders } = useAuth();
 
     useEffect(() => {
-        
-        const fetchOrders = async () => {
-            await getMyOrders(); 
-            
-        };
-        fetchOrders();
-    }, [getMyOrders]);
+        getMyOrders();
+    }, []);
+
+    console.log(myOrders)
 
     return (
-        <Container 
-            fixed 
-            sx={{ 
-                mt: 2,
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                gap: 2 
-            }}
+        <Container
+        fixed
+        sx={{
+            mt: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 2,
+        }}
         >
-            {myOrders.length > 0 ? (
-                myOrders.map(({ _id, address, total, orderItems}) => (
-                    <Box key={_id} sx={{ width: '100%' }}>
-                        <Typography variant="h4" align="center">{_id}</Typography>
-                        <Typography variant="h6" align="center">{address}</Typography>
-                        <Typography variant="h6" align="center">Items: {orderItems}</Typography>
-                        <Typography variant="h6" align="center">Total: {total}</Typography>
-                    </Box>
-                ))
-            ) : (
-                <Typography variant="h5" align="center">No orders found</Typography>
-            )}
+        {myOrders && myOrders.length > 0 ? (
+            myOrders.map(({ _id , address ,orderItems, total}: Order) => (
+            <Box key={_id} sx={{ width: "100%", border: 1, borderColor: "gray", p: 2 }}>
+                <Typography  align="center">{_id}</Typography>
+                <Typography  align="center">{address}</Typography>
+                <Typography  align="center">{orderItems.length}</Typography>
+                <Typography  align="center">{total}</Typography>
+            </Box>
+            ))
+        ) : (
+            <Typography variant="h6" align="center">No orders found.</Typography>
+        )}
         </Container>
     );
-}
+    }
