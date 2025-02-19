@@ -23,7 +23,6 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
             if (!response.ok) {
                 setError("Failed to fetch user cart, Please try again");
-                console.log(error)
                 return;
             }
 

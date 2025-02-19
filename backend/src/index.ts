@@ -14,7 +14,15 @@ const app = express();
 const port = 3001;
 
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+  origin: ["https://your-frontend.vercel.app"],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 console.log("Database URL:", process.env.DATABASE_URL);
 mongoose
   .connect(process.env.DATABASE_URL || "")
